@@ -6,13 +6,15 @@ const OAUTH_PLAYGROUND = 'https://developers.google.com/oauthplayground'
 require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
-const { JWT_RESET_KEY, ADMIN_EMAIL } = process.env
+const {
+  JWT_RESET_KEY,
+  ADMIN_EMAIL,
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REFRESH_TOKEN,
+} = process.env
 
 const User = require('../models/user')
-
-const CLIENT_ID = require('../config/token').CLIENT_ID
-const CLIENT_SECRET = require('../config/token').CLIENT_SECRET
-const REFRESH_TOKEN = require('../config/token').REFRESH_TOKEN
 
 exports.forgotPassword = (req, res) => {
   const { email } = req.body
@@ -78,12 +80,11 @@ exports.forgotPassword = (req, res) => {
               },
             })
 
-            // send mail with defined transport object
             const mailOptions = {
-              from: ADMIN_EMAIL, // sender address
-              to: email, // list of receivers
-              subject: 'Account Password Reset ✔', // Subject line
-              html: output, // html body
+              from: ADMIN_EMAIL,
+              to: email,
+              subject: 'Account Password Reset ✔',
+              html: output,
             }
 
             transporter.sendMail(mailOptions, (error, info) => {

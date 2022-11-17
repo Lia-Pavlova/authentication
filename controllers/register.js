@@ -7,13 +7,15 @@ require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
 
-const { JWT_SECRET_KEY, ADMIN_EMAIL } = process.env
+const {
+  JWT_SECRET_KEY,
+  ADMIN_EMAIL,
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REFRESH_TOKEN,
+} = process.env
 
 const User = require('../models/user')
-
-const CLIENT_ID = require('../config/token').CLIENT_ID
-const CLIENT_SECRET = require('../config/token').CLIENT_SECRET
-const REFRESH_TOKEN = require('../config/token').REFRESH_TOKEN
 
 exports.registerHandle = (req, res) => {
   const { name, email, password, password2 } = req.body
@@ -85,13 +87,12 @@ exports.registerHandle = (req, res) => {
           },
         })
 
-        // send mail with defined transport object
         const mailOptions = {
-          from: ADMIN_EMAIL, // sender address
-          to: email, // list of receivers
-          subject: 'Account Verification: Authentication ✔', // Subject line
+          from: ADMIN_EMAIL,
+          to: email,
+          subject: 'Account Verification: Authentication ✔',
           generateTextFromHTML: true,
-          html: output, // html body
+          html: output,
         }
 
         transporter.sendMail(mailOptions, (error, info) => {
